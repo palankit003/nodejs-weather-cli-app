@@ -6,5 +6,7 @@
 
 # create a .env file in the root directory and add API_KEY="Your Api Key"
 
+```
 npm install
 node index.js
+```
