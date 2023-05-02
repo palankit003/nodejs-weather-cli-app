@@ -36,58 +36,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var getWeather_1 = require("./getWeather");
-var readline = require("readline");
-var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-var askQuestion = function (question) {
-    return new Promise(function (resolve) {
-        rl.question(question, function (answer) {
-            resolve(answer);
-        });
-    });
-};
-function main() {
+exports.getWeather = void 0;
+var spin = require("nanospinner");
+require("dotenv").config();
+var apiKey = process.env.API_KEY;
+function getWeather(city) {
     return __awaiter(this, void 0, void 0, function () {
-        var name, quit, place, data, temp, error_1;
+        var spinner, req, data;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, askQuestion("What is your name? ")];
+                case 0:
+                    spinner = spin.createSpinner("Getting Data").start();
+                    return [4 /*yield*/, fetch("https://api.openweathermap.org/data/2.5/weather?q=".concat(city, "&appid=").concat(apiKey))];
                 case 1:
-                    name = _a.sent();
-                    console.log("Hello ".concat(name));
-                    quit = false;
-                    _a.label = 2;
+                    req = _a.sent();
+                    spinner.success(); // Stop the spinner animation
+                    process.stdout.write("\r");
+                    return [4 /*yield*/, req.json()];
                 case 2:
-                    if (!!quit) return [3 /*break*/, 10];
-                    _a.label = 3;
-                case 3:
-                    _a.trys.push([3, 8, , 9]);
-                    return [4 /*yield*/, askQuestion("Enter the name of a city to know its weather (or type 'quit'/ ctrl+C to exit): ")];
-                case 4:
-                    place = _a.sent();
-                    if (!(place.toLowerCase() === "quit")) return [3 /*break*/, 5];
-                    quit = true;
-                    return [3 /*break*/, 7];
-                case 5: return [4 /*yield*/, (0, getWeather_1.getWeather)(place)];
-                case 6:
                     data = _a.sent();
-                    temp = "".concat((data.main.temp - 273.15).toFixed(2), " \u00B0C");
-                    console.log(temp);
-                    _a.label = 7;
-                case 7: return [3 /*break*/, 9];
-                case 8:
-                    error_1 = _a.sent();
-                    console.error("Error: Invalid Data", error_1.message);
-                    return [3 /*break*/, 9];
-                case 9: return [3 /*break*/, 2];
-                case 10:
-                    rl.close();
-                    return [2 /*return*/];
+                    return [2 /*return*/, data];
             }
         });
     });
 }
-main();
+exports.getWeather = getWeather;
