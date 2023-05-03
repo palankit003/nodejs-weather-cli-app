@@ -1,4 +1,5 @@
 import { getWeather } from "./getWeather";
+import * as clc from "cli-color";
 const readline = require("readline");
 const rl = readline.createInterface({
   input: process.stdin,
@@ -30,7 +31,12 @@ async function main() {
       } else {
         const data = await getWeather(place);
         const temp = `${(data.main.temp - 273.15).toFixed(2)} °C`;
-        console.log(temp);
+        const weatherCondition = data.weather[0].main;
+        console.log(`${clc.blue("Current Temperature => ")} ${temp}`);
+        console.log(
+          `${clc.green("Weather Condition => ")} ${weatherCondition}`
+        );
+        console.log(data);
       }
     } catch (error) {
       console.error("Error: Invalid Data", error.message);
